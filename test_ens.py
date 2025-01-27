@@ -85,9 +85,6 @@ for i in folds_to_execute:
                 ensemble = c.get('ensemble')
                 classifier_name = c.get('classifier')
                 args = c.get('args', {})
-                if classifier_name == 'awe_cosine':
-                    args['std'] = std
-                    args['fld'] = '{}-{}'.format(d.split('.')[0], str(i))
                 start = time.time()
                 print('Started at: {} \t {} - {} - {} - {}'.format(time.ctime(),
                       ensemble, classifier_name, std, args))
@@ -107,8 +104,6 @@ for i in folds_to_execute:
                     'results/{}'.format(log), sep=";", decimal=",")
 
 df = pd.read_csv('results/{}'.format(log), sep=";", decimal=",")
-
-df_single = df
-single = df_single.groupby(['ensemble', 'classifier', 'standardization'], dropna=False)[['acc', 'f1']].mean()
+single = df.groupby(['ensemble', 'classifier', 'standardization'], dropna=False).agg(median_acc=('acc', 'median'), mean_acc=('acc', 'mean'), median_f1=('f1', 'median'), mean_f1=('f1', 'mean'))
 
 print(single)
