@@ -381,9 +381,6 @@ class TestClassifier(BaseClassifier):
 
         if self.execution != 'statevector':
             circuit.measure([self.meas], [1])
-            for idx in range(control_qubits - 1):
-                ctrl_idx = qubits_num - control_qubits + idx
-                circuit.measure([ctrl_idx], [1 + idx + 1])
 
         circuit.barrier()
 
